@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Upload File | Express + Cloudinary</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <script src="https://kit.fontawesome.com/a2d2a57f9e.js" crossorigin="anonymous"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #e0f7fa, #e1bee7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .card {
+      background: white;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      width: 100%;
+      max-width: 420px;
+      text-align: center;
+    }
+
+    .card h1 {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      color: #333;
+    }
+
+    .card i {
+      font-size: 3rem;
+      color: #4a148c;
+      margin-bottom: 0.8rem;
+    }
+
+    input[type="file"] {
+      margin: 1rem 0;
+      padding: 0.5rem;
+      width: 100%;
+    }
+
+    button {
+      background-color: #4a148c;
+      color: white;
+      padding: 0.7rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #6a1b9a;
+    }
+
+    .preview img {
+      margin-top: 1rem;
+      max-width: 100%;
+      border-radius: 12px;
+      display: none;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    #fileName {
+      font-size: 0.9rem;
+      color: #555;
+      margin-top: 0.5rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <i class="fas fa-cloud-upload-alt"></i>
+    <h1>Upload Your File</h1>
+
+    <form action="/api/upload" method="POST" enctype="multipart/form-data">
+      <input type="file" name="file" id="fileInput" accept="image/*" required />
+      <div id="fileName"></div>
+      <button type="submit"><i class="fas fa-upload"></i> Upload</button>
+    </form>
+
+    <div class="preview">
+      <img id="filePreview" alt="File Preview" />
+    </div>
+  </div>
+
+  <script>
+    const fileInput = document.getElementById('fileInput');
+    const filePreview = document.getElementById('filePreview');
+    const fileName = document.getElementById('fileName');
+
+    fileInput.addEventListener('change', function () {
+      const file = this.files[0];
+      if (file) {
+        fileName.textContent = `📎 ${file.name}`;
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          filePreview.src = e.target.result;
+          filePreview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      } else {
+        fileName.textContent = '';
+        filePreview.style.display = 'none';
+      }
+    });
+  </script>
+</body>
+
+</html>
